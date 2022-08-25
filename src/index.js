@@ -27,18 +27,22 @@ router.get('/:id', (req, res) => {  // GET '/api/productos/:id' -> devuelve un p
 router.post('/', (req, res) => {  // POST '/api/productos' -> recibe y agrega un producto, y lo devuelve con su id asignado.
     const { nombre, precio, urlImage } = req.body
     if (!nombre || !precio || !urlImage) {
+        res.status(400).json({ error: 'producto no encontrado' })
+    } else {
         const data = { nombre, precio, urlImage }
         data.id = prodID
         productos.push(data)
         prodID += 1
         res.send(data)
-    } else { res.status(400).json({ error: 'producto no encontrado' }) }
+    }
 })
 
 router.put('/:id', (req, res) => {  // PUT '/api/productos/:id' -> recibe y actualiza un producto según su id.
     const { id } = req.params
     const { nombre, precio, urlImage } = req.body
     if (!nombre || !precio || !urlImage) {
+        res.status(400).json({ error: 'producto no encontrado' })
+    } else {
         let contador = 0
         for (let i = 0; i < productos.length; i++) {
             if (productos[i].id == id) {
@@ -49,7 +53,7 @@ router.put('/:id', (req, res) => {  // PUT '/api/productos/:id' -> recibe y actu
                 break
             }
         }
-    } else { res.status(400).json({ error: 'producto no encontrado' }) }
+    }
     if (contador == 0) res.status(400).json({ error: 'producto no encontrado' })
     res.send(productos)
 })
